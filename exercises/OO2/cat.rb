@@ -1,20 +1,16 @@
 class Cat
-    attr_reader :name
+    @@total = 0
   
-    def initialize(name)
-      @name = name
+    def initialize
+      @@total += 1
     end
 
-    def self.generic_greeting
-      puts "Hello! I'm a cat!"
-    end
-
-    def personal_greeting
-      puts "Hello! My name is #{name}"
+    def self.total
+      @@total
     end
   end
   
-  kitty = Cat.new('Sophie')
-  
-  Cat.generic_greeting
-  kitty.personal_greeting
+kitty1 = Cat.new
+kitty2 = Cat.new
+
+p Cat.total
