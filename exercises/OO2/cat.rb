@@ -5,12 +5,10 @@ class Cat
       @name = name
     end
 
-    def rename(name)
-      self.name = name
+    def identify
+      self
     end
   end
   
   kitty = Cat.new('Sophie')
-  p kitty.name
-  kitty.rename('Chloe')
-  p kitty.name
+  p kitty.identify
