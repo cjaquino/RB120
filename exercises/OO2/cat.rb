@@ -1,16 +1,14 @@
 class Cat
-    @@total = 0
+    COLOR = 'purple'
   
-    def initialize
-      @@total += 1
+    def initialize(name)
+      @name = name
     end
 
-    def self.total
-      @@total
+    def greet
+      "Hello! My name is #{@name} and I'm a #{COLOR} cat!"
     end
   end
   
-kitty1 = Cat.new
-kitty2 = Cat.new
-
-p Cat.total
+  kitty = Cat.new('Sophie')
+  p kitty.greet
