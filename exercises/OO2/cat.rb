@@ -1,9 +1,16 @@
 class Cat
-  def self.generic_greeting
-    puts "Hello! I'm a cat!"
-  end
-end
+    attr_accessor :name
+  
+    def initialize(name)
+      @name = name
+    end
 
-kitty = Cat.new
-Cat.generic_greeting
-kitty.class.generic_greeting
+    def rename(name)
+      self.name = name
+    end
+  end
+  
+  kitty = Cat.new('Sophie')
+  p kitty.name
+  kitty.rename('Chloe')
+  p kitty.name
