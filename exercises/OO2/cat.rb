@@ -4,4 +4,6 @@ class Cat
   end
 end
 
+kitty = Cat.new
 Cat.generic_greeting
+kitty.class.generic_greeting
