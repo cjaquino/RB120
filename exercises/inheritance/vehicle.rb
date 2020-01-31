@@ -7,13 +7,15 @@ class Vehicle
 end
 
 class Truck < Vehicle
-end
+  def initialize(year)
+    super(year)
+    start_engine
+  end
 
-class Car < Vehicle
+  def start_engine
+    puts 'Ready to go!'
+  end
 end
 
 truck1 = Truck.new(1994)
 puts truck1.year
-
-car1 = Car.new(2006)
-puts car1.year
