@@ -7,15 +7,17 @@ class Vehicle
 end
 
 class Truck < Vehicle
-  def initialize(year)
-    super(year)
-    start_engine
-  end
+  attr_reader :bed_type
 
-  def start_engine
-    puts 'Ready to go!'
+  def initialize(year, bed_type)
+    super(year)
+    @bed_type = bed_type
   end
 end
 
-truck1 = Truck.new(1994)
+class Car < Vehicle
+end
+
+truck1 = Truck.new(1994, 'Short')
 puts truck1.year
+puts truck1.bed_type
