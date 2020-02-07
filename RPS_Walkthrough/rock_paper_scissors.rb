@@ -78,10 +78,12 @@ end
 
 class RPSGame
   attr_accessor :human, :computer
+  attr_reader :winning_score
 
   def initialize
     @human = Human.new
     @computer = Computer.new
+    @winning_score = 3
   end
 
   def display_welcome_message
@@ -107,9 +109,19 @@ class RPSGame
     else
       puts "It's a tie!"
     end
+    puts "Press [Enter] to continue..."
+    gets
   end
 
-  def display_score
+  def display_game_winner
+    if human.score == winning_score
+      puts "#{human.name} won the game!"
+    else
+      puts "#{computer.name} won the game"
+    end
+  end
+
+  def display_scores
     puts "#{human.name}:#{human.score} \t#{computer.name}:#{computer.score}"
   end
 
@@ -124,15 +136,27 @@ class RPSGame
     answer == 'y'
   end
 
+  def reset_scores
+    human.score = 0
+    computer.score = 0
+  end
+
   def play
     display_welcome_message
     loop do
-      display_score
-      human.choose
-      computer.choose
-      display_moves
-      display_round_winner
+      while human.score < winning_score && computer.score < winning_score
+        system("clear")
+        display_scores
+        human.choose
+        computer.choose
+        display_moves
+        display_round_winner
+      end
+      system("clear")
+      display_game_winner
+      display_scores
       break unless play_again?
+      reset_scores
     end
     display_goodbye_message
   end
