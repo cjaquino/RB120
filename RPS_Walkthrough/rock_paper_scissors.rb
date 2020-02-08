@@ -1,9 +1,14 @@
 class Player
-  attr_accessor :move, :name, :score
+  attr_accessor :move, :name, :score, :move_history
 
   def initialize
     set_name
     @score = 0
+    @move_history = []
+  end
+
+  def reset_move_history
+    @move_history = []
   end
 end
 
@@ -40,7 +45,7 @@ class Move
 
   def >(other_move)
     (rock? && other_move.scissors?) ||
-    (rock? && other_move.lizard?) ||
+      (rock? && other_move.lizard?) ||
       (paper? && other_move.rock?) ||
       (paper? && other_move.spock?) ||
       (scissors? && other_move.paper?) ||
@@ -53,7 +58,7 @@ class Move
 
   def <(other_move)
     (rock? && other_move.paper?) ||
-    (rock? && other_move.spock?) ||
+      (rock? && other_move.spock?) ||
       (paper? && other_move.scissors?) ||
       (paper? && other_move.lizard?) ||
       (scissors? && other_move.rock?) ||
@@ -85,6 +90,7 @@ class Human < Player
       puts "Sorry, invalid choice"
     end
     self.move = Move.new(choice)
+    self.move_history << move
   end
 end
 
@@ -95,21 +101,22 @@ class Computer < Player
 
   def choose
     self.move = Move.new(Move::VALUES.sample)
+    self.move_history << move
   end
 end
 
 class RPSGame
-  attr_accessor :human, :computer
+  attr_accessor :human, :computer, :winner_history
   attr_reader :winning_score
-
   def initialize
     @human = Human.new
     @computer = Computer.new
     @winning_score = 3
+    @winner_history = []
   end
 
   def display_welcome_message
-    puts "Welcome to Rock, Paper, Scissors!"
+    puts "Welcome to Rock, Paper, Scissors, Lizard, Spock!"
   end
 
   def display_goodbye_message
@@ -124,11 +131,14 @@ class RPSGame
   def display_round_winner
     if human.move > computer.move
       human.score += 1
+      @winner_history << human.name
       puts "#{human.name} won!"
     elsif human.move < computer.move
       computer.score += 1
+      @winner_history << computer.name
       puts "#{computer.name} won!"
     else
+      @winner_history << 'Tie!'
       puts "It's a tie!"
     end
     puts "Press [Enter] to continue..."
@@ -158,9 +168,21 @@ class RPSGame
     answer == 'y'
   end
 
-  def reset_scores
+  def reset_game
     human.score = 0
+    human.move_history = []
     computer.score = 0
+    computer.move_history = []
+    winner_history = []
+  end
+
+  def display_history
+    human_moves = human.move_history
+    computer_moves = computer.move_history
+    winners = winner_history
+    human_moves.each_with_index do |move, i|
+      puts "Winner:#{winners[i]}\t#{human.name}:#{move}\t#{computer.name}:#{computer_moves[i]}"
+    end
   end
 
   def play
@@ -177,8 +199,9 @@ class RPSGame
       system("clear")
       display_game_winner
       display_scores
+      display_history
       break unless play_again?
-      reset_scores
+      reset_game
     end
     display_goodbye_message
   end
