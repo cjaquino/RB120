@@ -1,5 +1,3 @@
-require 'pry'
-
 class Board
   WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
                    [1, 4, 7], [2, 5, 8], [3, 6, 9],
@@ -10,6 +8,7 @@ class Board
     (1..9).each { |key| @squares[key] = Square.new }
   end
 
+  # rubocop:disable Metrics/AbcSize
   def draw
     puts "     |     |"
     puts "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]}"
@@ -24,10 +23,8 @@ class Board
     puts "     |     |"
     puts ""
   end
+  # rubocop:enable Metrics/AbcSize
 
-  # def set_square_at(key, marker)
-  #   @squares[key].marker = marker
-  # end
   def []=(key, marker)
     @squares[key].marker = marker
   end
@@ -48,8 +45,7 @@ class Board
   def winning_marker
     WINNING_LINES.each do |line|
       s = @squares.values_at(*line).map(&:marker)
-      return s[0] if s.max == s.min && 
-             s[0] != Square::INITIAL_MARKER
+      return s[0] if s.max == s.min && s[0] != Square::INITIAL_MARKER
     end
     nil
   end
