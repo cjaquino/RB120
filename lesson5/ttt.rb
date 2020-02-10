@@ -138,8 +138,18 @@ class TTTGame
     display_board
   end
 
+  def joinor(arr, delim, last_delim)
+    if arr.size > 2
+      "#{arr[0..-2].join(delim)}, #{last_delim} #{arr[-1]}"
+    elsif arr.size == 2
+      "#{arr[0]} #{last_delim} #{arr[1]}"
+    else
+      "#{arr[0]}"
+    end
+  end
+
   def human_moves
-    puts "Choose a square (#{board.unmarked_keys.join(', ')}): "
+    puts "Choose a square (#{joinor(board.unmarked_keys,', ', 'or')}): "
     num = nil
     loop do
       num = gets.chomp.to_i
