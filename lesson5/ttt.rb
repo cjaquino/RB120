@@ -85,6 +85,10 @@ class TTTGame
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
   FIRST_TO_MOVE = HUMAN_MARKER
+  WINNING_SCORE = 5
+
+  @@human_wins = 0
+  @@computer_wins = 0
 
   attr_reader :board, :human, :computer
 
@@ -100,16 +104,21 @@ class TTTGame
     display_welcome_message
 
     loop do
-      display_board
-
       loop do
-        current_player_moves
-        break if board.someone_won? || board.full?
-        clear_screen_and_display_board if human_turn?
+        display_board
+
+        loop do
+          current_player_moves
+          break if board.someone_won? || board.full?
+          clear_screen_and_display_board if human_turn?
+        end
+        display_round_result
+        reset_round
+        break if @@human_wins == WINNING_SCORE || @@computer_wins == WINNING_SCORE
       end
-      display_result
+      display_game_result
       break unless play_again?
-      reset
+      reset_game
       display_play_again_message
     end
 
@@ -120,6 +129,7 @@ class TTTGame
 
   def display_welcome_message
     puts "Welcome to Tic-Tac-Toe!"
+    puts "First player to #{WINNING_SCORE} wins!"
     puts ""
   end
 
@@ -128,7 +138,7 @@ class TTTGame
   end
 
   def display_board
-    puts "You: #{human.marker}. Computer: #{computer.marker}"
+    puts "You(#{human.marker}):#{@@human_wins} Computer(#{computer.marker}):#{@@computer_wins}"
     puts ""
     board.draw
   end
@@ -167,15 +177,28 @@ class TTTGame
     board[num] = computer.marker
   end
 
-  def display_result
+  def display_round_result
     clear_screen_and_display_board
     case board.winning_marker
     when human.marker
-      puts "You won!"
+      puts "You won the round!"
+      @@human_wins += 1
     when computer.marker
-      puts "Computer won!"
+      puts "Computer won the round!"
+      @@computer_wins += 1
     else
       puts "It's a tie!"
+    end
+    puts ""
+    puts "Press [Enter] to play next round..."
+    gets
+  end
+
+  def display_game_result
+    if @@human_wins == WINNING_SCORE
+      puts "Congratulations! You won the game!!!"
+    else
+      puts "Maybe next time..."
     end
   end
 
@@ -195,10 +218,15 @@ class TTTGame
     system('clear')
   end
 
-  def reset
+  def reset_round
     board.reset
     clear
     @current_player = FIRST_TO_MOVE
+  end
+
+  def reset_game
+    @@human_wins = 0
+    @@computer_wins = 0
   end
 
   def display_play_again_message
