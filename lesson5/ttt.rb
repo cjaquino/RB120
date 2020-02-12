@@ -82,7 +82,7 @@ class Square
 end
 
 class Player
-  attr_accessor :marker
+  attr_accessor :marker, :name
 
   def initialize(marker = 'O')
     @marker = marker
@@ -93,6 +93,7 @@ class TTTGame
   # HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
   WINNING_SCORE = 2
+  COMPUTER_NAMES = ['R2-D2', 'C-3PO', 'BB-8', 'IG-88']
 
   @@human_wins = 0
   @@computer_wins = 0
@@ -111,6 +112,8 @@ class TTTGame
     display_welcome_message
     
     loop do
+      set_human_name
+      set_computer_name
       loop do
         display_board
 
@@ -145,7 +148,7 @@ class TTTGame
   end
 
   def display_board
-    puts "You(#{human.marker}):#{@@human_wins} Computer(#{computer.marker}):#{@@computer_wins}"
+    puts "#{human.name}(#{human.marker}):#{@@human_wins}\t#{computer.name}(#{computer.marker}):#{@@computer_wins}"
     puts ""
     board.draw
   end
@@ -178,6 +181,16 @@ class TTTGame
     elsif ans == 'c' || ans == 'computer'
       computer.marker
     end
+  end
+
+  def set_human_name
+    print "What's your name? "
+    name = gets.chomp
+    human.name = name
+  end
+
+  def set_computer_name
+    computer.name = COMPUTER_NAMES.sample
   end
 
   def clear_screen_and_display_board
@@ -234,10 +247,10 @@ class TTTGame
     clear_screen_and_display_board
     case board.winning_marker
     when human.marker
-      puts "You won the round!"
+      puts "#{human.name} won the round!"
       @@human_wins += 1
     when computer.marker
-      puts "Computer won the round!"
+      puts "#{computer.name} won the round!"
       @@computer_wins += 1
     else
       puts "It's a tie!"
@@ -249,9 +262,9 @@ class TTTGame
 
   def display_game_result
     if @@human_wins == WINNING_SCORE
-      puts "Congratulations! You won the game!!!"
+      puts "Congratulations! #{human.name} won the game!!!"
     else
-      puts "Maybe next time..."
+      puts "#{computer.name} won! Maybe next time..."
     end
   end
 
