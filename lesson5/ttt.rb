@@ -29,8 +29,11 @@ class Board
   end
   # rubocop:enable Metrics/AbcSize
 
+  def [](key)
+    @squares[key]
+  end
+
   def []=(key, marker)
-    # binding.pry
     @squares[key].marker = marker
   end
 
@@ -177,10 +180,13 @@ class TTTGame
   end
 
   def computer_moves
-    num = if risky_square(COMPUTER_MARKER)
-      risky_square(COMPUTER_MARKER)
-    elsif risky_square(HUMAN_MARKER)
-      risky_square(HUMAN_MARKER)
+    # binding.pry
+    num = if risky_square(computer.marker)
+      risky_square(computer.marker)
+    elsif risky_square(human.marker)
+      risky_square(human.marker)
+    elsif board.squares[5].unmarked?
+      5
     else
       board.unmarked_keys.sample
     end
