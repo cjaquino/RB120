@@ -186,6 +186,7 @@ class TTTGame
     Board::WINNING_LINES.each do |line|
       s = board.squares.values_at(*line).map(&:marker)
       return line[s.index(' ')] if s.count(HUMAN_MARKER) == 2 && s.count(Square::INITIAL_MARKER) == 1
+      return line[s.index(' ')] if s.count(COMPUTER_MARKER) == 2 && s.count(Square::INITIAL_MARKER) == 1
     end
     nil
   end
