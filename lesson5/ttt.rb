@@ -82,17 +82,17 @@ class Square
 end
 
 class Player
-  attr_reader :marker
+  attr_accessor :marker
 
-  def initialize((marker))
+  def initialize(marker = 'O')
     @marker = marker
   end
 end
 
 class TTTGame
-  HUMAN_MARKER = "X"
+  # HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
-  WINNING_SCORE = 5
+  WINNING_SCORE = 2
 
   @@human_wins = 0
   @@computer_wins = 0
@@ -101,15 +101,15 @@ class TTTGame
 
   def initialize
     @board = Board.new
-    @human = Player.new(HUMAN_MARKER)
-    @computer = Player.new(COMPUTER_MARKER)
+    @human = Player.new(select_human_marker)
+    @computer = Player.new
     @current_player = select_first_player_marker
   end
 
   def play
     clear
     display_welcome_message
-
+    
     loop do
       loop do
         display_board
@@ -120,8 +120,8 @@ class TTTGame
           clear_screen_and_display_board if human_turn?
         end
         display_round_result
-        reset_round
         break if @@human_wins == WINNING_SCORE || @@computer_wins == WINNING_SCORE
+        reset_round
       end
       display_game_result
       break unless play_again?
@@ -150,6 +150,19 @@ class TTTGame
     board.draw
   end
 
+  def select_human_marker
+    print "Pick a single character marker: "
+    marker = nil
+    loop do
+      marker = gets.chomp
+      break if marker.size == 1 && marker
+      puts "That's the computer marker..." if marker == 'O'
+      puts "Please pick a single character marker."
+    end
+
+    marker
+  end
+
   def select_first_player_marker
     puts "Who shall go first? (H)uman or (C)omputer?"
 
@@ -160,10 +173,10 @@ class TTTGame
       puts "Invalid input. (H)uman or (C)omputer?"
     end
 
-    if ans == 'h' || ans == 'human'
-      HUMAN_MARKER
+    a = if ans == 'h' || ans == 'human'
+      human.marker
     elsif ans == 'c' || ans == 'computer'
-      COMPUTER_MARKER
+      computer.marker
     end
   end
 
@@ -267,6 +280,7 @@ class TTTGame
   def reset_game
     @@human_wins = 0
     @@computer_wins = 0
+    select_human_marker
   end
 
   def display_play_again_message
@@ -275,17 +289,17 @@ class TTTGame
   end
 
   def current_player_moves
-    if @current_player == HUMAN_MARKER
+    if @current_player == human.marker
       human_moves
-      @current_player = COMPUTER_MARKER
+      @current_player = computer.marker
     else
       computer_moves
-      @current_player = HUMAN_MARKER
+      @current_player = human.marker
     end
   end
 
   def human_turn?
-    @current_player == HUMAN_MARKER
+    @current_player == human.marker
   end
 end
 
