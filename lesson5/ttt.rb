@@ -103,7 +103,7 @@ class TTTGame
     @board = Board.new
     @human = Player.new(HUMAN_MARKER)
     @computer = Player.new(COMPUTER_MARKER)
-    @current_player = select_first_player
+    @current_player = select_first_player_marker
   end
 
   def play
@@ -150,8 +150,21 @@ class TTTGame
     board.draw
   end
 
-  def select_first_player
-    HUMAN_MARKER
+  def select_first_player_marker
+    puts "Who shall go first? (H)uman or (C)omputer?"
+
+    ans = nil
+    loop do 
+      ans = gets.chomp.downcase
+      break if ['human','computer', 'h', 'c'].include?(ans)
+      puts "Invalid input. (H)uman or (C)omputer?"
+    end
+
+    if ans == 'h' || ans == 'human'
+      HUMAN_MARKER
+    elsif ans == 'c' || ans == 'computer'
+      COMPUTER_MARKER
+    end
   end
 
   def clear_screen_and_display_board
@@ -178,12 +191,10 @@ class TTTGame
       puts "Sorry, that's not a valid choice."
     end
 
-    # board.set_square_at(num, human.marker)
     board[num] = human.marker
   end
 
   def computer_moves
-    # binding.pry
     num = if risky_square(computer.marker)
       risky_square(computer.marker)
     elsif risky_square(human.marker)
@@ -250,7 +261,7 @@ class TTTGame
   def reset_round
     board.reset
     clear
-    @current_player = select_first_player
+    @current_player = select_first_player_marker
   end
 
   def reset_game
