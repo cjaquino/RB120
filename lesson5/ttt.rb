@@ -173,7 +173,7 @@ class TTTGame
     when human.marker
       puts "You won!"
     when computer.marker
-      puts "You lost sucka!"
+      puts "Computer won!"
     else
       puts "It's a tie!"
     end
