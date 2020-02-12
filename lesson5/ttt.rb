@@ -177,16 +177,22 @@ class TTTGame
   end
 
   def computer_moves
-    num = risky_square ? risky_square : board.unmarked_keys.sample
+    num = if risky_square(COMPUTER_MARKER)
+      risky_square(COMPUTER_MARKER)
+    elsif risky_square(HUMAN_MARKER)
+      risky_square(HUMAN_MARKER)
+    else
+      board.unmarked_keys.sample
+    end
+
     board[num] = computer.marker
   end
 
   # return integer position of at risk square
-  def risky_square
+  def risky_square(mrkr)
     Board::WINNING_LINES.each do |line|
       s = board.squares.values_at(*line).map(&:marker)
-      return line[s.index(' ')] if s.count(COMPUTER_MARKER) == 2 && s.count(Square::INITIAL_MARKER) == 1
-      return line[s.index(' ')] if s.count(HUMAN_MARKER) == 2 && s.count(Square::INITIAL_MARKER) == 1
+      return line[s.index(' ')] if s.count(mrkr) == 2 && s.count(Square::INITIAL_MARKER) == 1
     end
     nil
   end
