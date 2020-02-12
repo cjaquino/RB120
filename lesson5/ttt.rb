@@ -1,7 +1,11 @@
+require 'pry'
+
 class Board
   WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
                    [1, 4, 7], [2, 5, 8], [3, 6, 9],
                    [1, 5, 9], [3, 5, 7]]
+
+  attr_accessor :squares
 
   def initialize
     @squares = {}
@@ -26,6 +30,7 @@ class Board
   # rubocop:enable Metrics/AbcSize
 
   def []=(key, marker)
+    # binding.pry
     @squares[key].marker = marker
   end
 
@@ -172,9 +177,17 @@ class TTTGame
   end
 
   def computer_moves
-    num = board.unmarked_keys.sample
-    # board.set_square_at(num, computer.marker)
+    num = risky_square ? risky_square : board.unmarked_keys.sample
     board[num] = computer.marker
+  end
+
+  # return integer position of at risk square
+  def risky_square
+    Board::WINNING_LINES.each do |line|
+      s = board.squares.values_at(*line).map(&:marker)
+      return line[s.index(' ')] if s.count(HUMAN_MARKER) == 2 && s.count(Square::INITIAL_MARKER) == 1
+    end
+    nil
   end
 
   def display_round_result
