@@ -243,7 +243,7 @@ class TTTGame
       puts "It's a tie!"
     end
     puts ""
-    puts "Press [Enter] to play next round..."
+    puts "Press [Enter] to continue..."
     gets
   end
 
