@@ -92,7 +92,6 @@ end
 class TTTGame
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = HUMAN_MARKER
   WINNING_SCORE = 5
 
   @@human_wins = 0
@@ -104,7 +103,7 @@ class TTTGame
     @board = Board.new
     @human = Player.new(HUMAN_MARKER)
     @computer = Player.new(COMPUTER_MARKER)
-    @current_player = FIRST_TO_MOVE
+    @current_player = select_first_player
   end
 
   def play
@@ -149,6 +148,10 @@ class TTTGame
     puts "You(#{human.marker}):#{@@human_wins} Computer(#{computer.marker}):#{@@computer_wins}"
     puts ""
     board.draw
+  end
+
+  def select_first_player
+    HUMAN_MARKER
   end
 
   def clear_screen_and_display_board
@@ -247,7 +250,7 @@ class TTTGame
   def reset_round
     board.reset
     clear
-    @current_player = FIRST_TO_MOVE
+    @current_player = select_first_player
   end
 
   def reset_game
