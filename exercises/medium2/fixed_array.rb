@@ -15,7 +15,7 @@ class FixedArray
   end
 
   def to_a
-    @arr
+    @arr.clone
   end
 
   def to_s
