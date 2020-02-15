@@ -1,3 +1,29 @@
+class FixedArray
+  def initialize(size)
+    @arr = [nil]*size
+    @size = size
+  end
+
+  def [](idx)
+    raise IndexError if idx < -@size || idx >= @size
+    @arr[idx]
+  end
+
+  def []=(idx, val)
+    raise IndexError if idx < -@size || idx >= @size
+    @arr[idx] = val
+  end
+
+  def to_a
+    @arr
+  end
+
+  def to_s
+    @arr.to_s
+  end
+
+end
+
 fixed_array = FixedArray.new(5)
 puts fixed_array[3] == nil
 puts fixed_array.to_a == [nil] * 5
