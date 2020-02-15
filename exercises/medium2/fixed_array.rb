@@ -19,7 +19,7 @@ class FixedArray
   end
 
   def to_s
-    @arr.to_s
+    to_a.to_s
   end
 
 end
