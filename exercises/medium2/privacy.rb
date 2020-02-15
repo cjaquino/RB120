@@ -1,10 +1,10 @@
 class Machine
   def start
-    self.flip_switch(:on)
+    flip_switch(:on)
   end
 
   def stop
-    self.flip_switch(:off)
+    flip_switch(:off)
   end
 
   private
