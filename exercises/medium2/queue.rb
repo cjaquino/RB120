@@ -29,6 +29,8 @@ class CircularQueue
     oldest.value
   end
 
+  private
+
   def initial_queue(size)
     q = []
     size.times { |_| q << QueueItem.new(nil, @@queue_time) }
