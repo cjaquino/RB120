@@ -1,3 +1,15 @@
+class Minilang
+
+  def initialize(str)
+    @command = str
+  end
+
+  def eval
+
+  end
+
+end
+
 Minilang.new('PRINT').eval
 # 0
 
