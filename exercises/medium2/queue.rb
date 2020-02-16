@@ -33,7 +33,7 @@ class CircularQueue
 
   def initial_queue(size)
     q = []
-    size.times { |_| q << QueueItem.new(nil, @@queue_time) }
+    size.times { |_| q << QueueItem.new(nil, @time) }
     q
   end
 
