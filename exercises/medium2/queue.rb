@@ -6,14 +6,14 @@ class QueueItem
 end
 
 class CircularQueue
-  @@queue_time = 0
 
   def initialize(size)
-    @queue = size.times { |_| QueueItem.new(nil, @@queue_time) }
+    @time = 0
+    @queue = size.times { |_| QueueItem.new(nil, @time) }
   end
 
   def enqueue
-
+    
   end
 
   def dequeue
