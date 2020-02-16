@@ -1,6 +1,15 @@
-class CircularQueue
-  def initialize(size)
+class QueueItem
+  def initialize(val, time)
+    @value = val
+    @time = time
+  end
+end
 
+class CircularQueue
+  @@queue_time = 0
+
+  def initialize(size)
+    @queue = size.times { |_| QueueItem.new(nil, @@queue_time) }
   end
 
   def enqueue
