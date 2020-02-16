@@ -1,13 +1,103 @@
+class InvalidTokenError < StandardError; end
+
+class EmptyStackError < StandardError; end
+
 class Minilang
+  VALID_COMMANDS = %w(push add sub mult div mod pop print)
 
   def initialize(str)
-    @command = str
+    @commands = str.split
+    @register = 0
+    @stack = []
   end
 
   def eval
+    begin
+      valid_command?
+    rescue InvalidTokenError => e
+      puts e.message
+      return nil
+    end
 
+    @commands.each do |c|
+      begin
+        perform_command(c)
+      rescue EmptyStackError => e
+        puts e.message
+        return nil
+      end
+    end
+    
   end
 
+  private
+
+  def perform_command(c)
+    case c.downcase
+    when 'push'
+      push
+    when 'add'
+      add
+    when 'sub'
+      subtract
+    when 'mult'
+      multiply
+    when 'div'
+      divide
+    when 'mod'
+      modulo
+    when 'pop'
+      pop
+    when 'print'
+      print_register
+    else
+      @register = c.to_i
+    end
+  end
+
+  def valid_command?
+    valids = @commands.select { |c| VALID_COMMANDS.include?(c.downcase) || valid_integer?(c) }
+    invalids = @commands - valids
+    raise InvalidTokenError, "Invalid Token: #{invalids[0]}" unless valids == @commands
+    valids == @commands
+  end
+
+  def valid_integer?(str)
+    str == str.to_i.to_s
+  end
+
+  def print_register
+    puts @register
+  end
+
+  def push
+    @stack << @register
+  end
+
+  def pop
+    raise EmptyStackError, "Empty stack!" if @stack.empty?
+    @register = @stack.pop
+  end
+
+  def add
+    @register += pop
+  end
+
+  def subtract
+    @register -= pop
+  end
+
+  def multiply
+    @register *= pop
+  end
+
+  def divide
+    @register /= pop
+  end
+
+  def modulo
+    @register %= pop
+  end
 end
 
 Minilang.new('PRINT').eval
@@ -42,3 +132,6 @@ Minilang.new('-3 PUSH 5 SUB PRINT').eval
 
 Minilang.new('6 PUSH').eval
 # (nothing printed; no PRINT commands)
+
+
+Minilang.new('6 PUSH').eval
