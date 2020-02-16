@@ -46,7 +46,7 @@ class CircularQueue
   end
 
   def empty?
-    @queue.all? { |q| q.value == nil }
+    @queue.all? { |q| q.value.nil? }
   end
 
   def increment_time
@@ -54,7 +54,7 @@ class CircularQueue
   end
 
   def has_empty_spots?
-    @queue.any? { |q| q.value == nil }
+    @queue.any? { |q| q.value.nil? }
   end
 
   def first_empty_idx
@@ -62,7 +62,7 @@ class CircularQueue
   end
 
   def empty_items
-    @queue.select { |q| q.value == nil}
+    @queue.select { |q| q.value.nil? }
   end
 
   def filled_items
