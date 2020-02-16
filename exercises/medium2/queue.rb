@@ -1,3 +1,17 @@
+class CircularQueue
+  def initialize(size)
+
+  end
+
+  def enqueue
+
+  end
+
+  def dequeue
+
+  end
+end
+
 queue = CircularQueue.new(3)
 puts queue.dequeue == nil
 
