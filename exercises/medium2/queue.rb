@@ -1,4 +1,6 @@
 class QueueItem
+  attr_reader :value, :time
+
   def initialize(val, time)
     @value = val
     @time = time
@@ -9,15 +11,67 @@ class CircularQueue
   @@queue_time = 0
 
   def initialize(size)
-    @queue = size.times { |_| QueueItem.new(nil, @@queue_time) }
+    @queue = initial_queue(size)
+    @time = 0
   end
 
-  def enqueue
+  def enqueue(val)
+    dequeue unless has_empty_spots?
 
+    increment_time
+    @queue[first_empty_idx] = QueueItem.new(val, @time)
   end
 
   def dequeue
+    return nil if empty?
 
+    oldest = oldest_queue_item
+    @queue[oldest_index] = QueueItem.new(nil, @time)
+    oldest.value
+  end
+
+  def initial_queue(size)
+    q = []
+    size.times { |_| q << QueueItem.new(nil, @@queue_time) }
+    q
+  end
+
+  def oldest_queue_item
+    filled_items.min_by { |q| q.time }
+  end
+
+  def oldest_index
+    @queue.index(oldest_queue_item)
+  end
+
+  def empty?
+    @queue.all? { |q| q.value == nil }
+  end
+
+  def increment_time
+    @time += 1
+  end
+
+  def has_empty_spots?
+    @queue.any? { |q| q.value == nil }
+  end
+
+  def first_empty_idx
+    @queue.index(empty_items.first)
+  end
+
+  def empty_items
+    @queue.select { |q| q.value == nil}
+  end
+
+  def filled_items
+    @queue.select { |q| q.value != nil}
+  end
+
+  def to_s
+    puts "--------------"
+    @queue.each { |q| puts "Value:#{q.value}\t Time:#{q.time}"}
+    puts "--------------"
   end
 end
 
