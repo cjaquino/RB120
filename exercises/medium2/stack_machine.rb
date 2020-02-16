@@ -6,20 +6,21 @@ class Minilang
   VALID_COMMANDS = %w(push add sub mult div mod pop print)
 
   def initialize(str)
-    @commands = str.split
+    @commands = str
     @register = 0
     @stack = []
   end
 
-  def eval
+  def eval(param = nil)
+    command = format(@commands, param).split
     begin
-      valid_command?
+      valid_command?(command)
     rescue InvalidTokenError => e
       puts e.message
       return nil
     end
 
-    @commands.each do |c|
+    command.each do |c|
       begin
         perform_command(c)
       rescue EmptyStackError => e
@@ -55,11 +56,11 @@ class Minilang
     end
   end
 
-  def valid_command?
-    valids = @commands.select { |c| VALID_COMMANDS.include?(c.downcase) || valid_integer?(c) }
-    invalids = @commands - valids
-    raise InvalidTokenError, "Invalid Token: #{invalids[0]}" unless valids == @commands
-    valids == @commands
+  def valid_command?(commands)
+    valids = commands.select { |c| VALID_COMMANDS.include?(c.downcase) || valid_integer?(c) }
+    invalids = commands - valids
+    raise InvalidTokenError, "Invalid Token: #{invalids[0]}" unless valids == commands
+    valids == commands
   end
 
   def valid_integer?(str)
@@ -99,6 +100,9 @@ class Minilang
     @register %= pop
   end
 end
+
+# CENTIGRADE_TO_FAHRENHEIT = '5 PUSH %<degrees_c>d PUSH 9 MULT DIV PUSH 32 ADD PRINT'
+
 
 Minilang.new('PRINT').eval
 # 0
