@@ -2,7 +2,7 @@ class Card
   FACE_VALUES = {'Jack' => 11, 'Queen' => 12, 'King' => 13, 'Ace' => 14}
   SUIT_VALUES = {'Spades' => 4, 'Hearts' => 3, 'Clubs' => 2, 'Diamonds' => 1}
 
-  attr_reader :rank, :suit
+  attr_reader :rank, :suit, :rank_value
 
   include Comparable
 
@@ -54,9 +54,11 @@ end
 
 class PokerHand
   def initialize(deck)
+    @hand = draw_five_cards(deck)
   end
 
   def print
+    @hand.each { |card| puts card }
   end
 
   def evaluate
@@ -77,30 +79,76 @@ class PokerHand
   private
 
   def royal_flush?
+    straight_flush? && ranks.include?('Ace')
   end
 
   def straight_flush?
+    straight? && flush?
   end
 
   def four_of_a_kind?
+    ranks.uniq.each do |r|
+      return true if ranks.count(r) == 4
+    end
+    false
   end
 
   def full_house?
+    three_of_a_kind? && ranks.uniq.size == 2
   end
 
   def flush?
+    suits.all?(suits[0])
   end
 
   def straight?
+    sorted = rank_values.sort
+    sorted[-1] - sorted[0] == 4 && ranks.uniq.size == 5
   end
 
   def three_of_a_kind?
+    ranks.uniq.each do |r|
+      return true if ranks.count(r) == 3
+    end
+    false
   end
 
   def two_pair?
+    pairs = 0
+    ranks.uniq.each do |r|
+      pairs += 1 if ranks.count(r) == 2
+    end
+    pairs == 2
   end
 
   def pair?
+    ranks.uniq.size == 4
+  end
+
+  def draw_five_cards(deck)
+    cards = []
+    5.times { |_| cards << deck.draw }
+    cards
+  end
+
+  def ranks
+    values = []
+    @hand.each do |card|
+      values << card.rank
+    end
+    values
+  end
+
+  def rank_values
+    @hand.map { |r| r.rank_value }
+  end
+
+  def suits
+    s = []
+    @hand.each do |card|
+      s << card.suit
+    end
+    s
   end
 end
 
@@ -108,8 +156,8 @@ hand = PokerHand.new(Deck.new)
 hand.print
 puts hand.evaluate
 
-# Danger danger danger: monkey
-# patching for testing purposes.
+# # Danger danger danger: monkey
+# # patching for testing purposes.
 class Array
   alias_method :draw, :pop
 end
