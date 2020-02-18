@@ -1,5 +1,6 @@
 class Card
   FACE_VALUES = {'Jack' => 11, 'Queen' => 12, 'King' => 13, 'Ace' => 14}
+  SUIT_VALUES = {'Spades' => 4, 'Hearts' => 3, 'Clubs' => 2, 'Diamonds' => 1}
 
   attr_reader :rank, :suit
 
@@ -15,7 +16,11 @@ class Card
   end
 
   def <=>(other)
-    rank_value <=> other.rank_value
+    if rank == other.rank
+      SUIT_VALUES[suit] <=> SUIT_VALUES[other.suit]
+    else
+      rank_value <=> other.rank_value
+    end
   end
 
   def rank_value
@@ -49,5 +54,5 @@ puts cards.max.rank == 'Jack'
 cards = [Card.new(8, 'Diamonds'),
          Card.new(8, 'Clubs'),
          Card.new(8, 'Spades')]
-puts cards.min.rank == 8
-puts cards.max.rank == 8
+puts cards.min
+puts cards.max
